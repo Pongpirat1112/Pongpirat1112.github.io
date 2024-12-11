@@ -2,28 +2,21 @@
 <html lang="en">
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
+    ;
     <script>
-      if (sessionStorage.getItem("user") == null) {
-        alert("กรุณาล็อกอินก่อนเข้าใช้งาน");
-        location.href = "./";
-      }
-
       $(function () {
         $("head").load("head.html");
         $("#bodys").load("body.html");
         $("#foots").load("foot.html");
       });
     </script>
-    <title>page3</title>
 
     <script>
       sid = [];
       kru = [];
       sname = [];
       dept = [];
-      date = [];
+      dapt = [];
 
       if (
         localStorage.getItem("sid") != null &&
@@ -46,19 +39,10 @@
 
     <div class="container d-flex flex-wrap justify-content-center gap-5 mt-5">
       <!-- <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 80px;">     -->
-      <div class="card" style="width: 100rem">
+      <div class="card" style="width: 50rem">
         <div class="card-body">
           <h5 class="card-title">ตารางข้อมูลการยืมครุภัณฑ์</h5>
-          <p class="card-text">
-            <button
-              type="button"
-              id="add_data"
-              class="btn btn-primary w-25"
-              onclick="add_data()"
-            >
-              Add Data
-            </button>
-          </p>
+          <p class="card-text"></p>
           <table
             id="tb_student"
             class="table table-bordered border border-dark border-3 table-hover table-striped"
@@ -70,8 +54,6 @@
                 <th>ชื่อ - สกุล (ผู้ยืม)</th>
                 <th>วันที่ยืม</th>
                 <th>สถานที่ใช้งาน</th>
-
-                <th>แก้ไข</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -95,14 +77,6 @@
           row.insertCell().innerHTML = sname[i];
           row.insertCell().innerHTML = date[i];
           row.insertCell().innerHTML = dept[i];
-          row.insertCell().innerHTML =
-            '<button type="button" id="btn_edit" class="btn btn-warning mx-2" onclick="click_edit_data(' +
-            i +
-            ')">Edit</button><button type="button" id="btn_delete" class="btn btn-danger "onclick="click_delete_data(' +
-            i +
-            ')">Delete</button><button type="button" class="btn btn-info mx-2" onclick="generateQRCode(' +
-            i +
-            ')">Print QR</button>';
         }
       }
 
@@ -117,7 +91,7 @@
         row.insertCell().innerHTML =
           '<div class="form-floating mb-3"><input type="text" class="form-control" id="date" placeholder=""><label>Date Time</label> </div>';
         row.insertCell().innerHTML =
-          '<div class="form-floating mb-3"><select id="dept" class="form-select" aria-label="Default select example"> <option selected></option><option value="สำนักปลัดเทศบาล">สำนักปลัดเทศบาล</option><option value="หน่วยงานตรวจสอบภายใน">หน่วยงานตรวจสอบภายใน</option> <option value="กองคลัง">กองคลัง</option><option value="กองช่าง">กองช่าง</option><option value="กองการศึกษา">กองการศึกษา</option><option value="กองสาธารณสุขฯ">กองสาธารณสุขฯ</option><option value="กองสวัสดิการสังคม">กองสวัสดิการสังคม</option>  </select>  </div>';
+          '<div class="form-floating mb-3"><select id="dept" class="form-select" aria-label="Default select example"> <option selected>Choose Department</option><option value="ช่างกลโรงงาน">ช่างกลโรงงาน</option><option value="ช่างยนต์">ช่างยนต์</option> <option value="เทคโนโลยีสารสนเทศ">เทคโนโลยีสารสนเทศ</option>  </select>  </div>';
         row.insertCell().innerHTML =
           '<button type="button" class="btn btn-warning mx-2 " onclick="click_save_add()">Save</button><button type="button" class="btn btn-danger " onclick="click_cancel_add()">Cancel</button>';
 
@@ -194,33 +168,24 @@
       function click_edit_data(row) {
         //alert(row)
         tb_student.rows[row].cells[1].innerHTML =
-          '<div class="form-floating mb-3"><input type="text" class="form-control" id="kru" placeholder="" value=" ' +
-          kru[row] +
-          ' "><label>Thing</label> </div>'; // แก้ไขตำแหน่งประเภทครุภัณฑ์
-
-        tb_student.rows[row].cells[2].innerHTML =
           '<div class="form-floating mb-3"><input type="text" class="form-control" id="sname" placeholder="" value=" ' +
           sname[row] +
-          ' "><label>Full Name</label> </div>'; // แก้ไขตำแหน่งชื่อ-นามสกุล
-
+          ' "><label>Full Name</label> </div>';
+        tb_student.rows[row].cells[2].innerHTML =
+          '<div class="form-floating mb-3"> <input type="text" class="form-control" id="kru" placeholder="" value=" ' +
+          ' "><label>Thing</label> </div>';
         tb_student.rows[row].cells[3].innerHTML =
-          '<div class="form-floating mb-3"><input type="text" class="form-control" id="date" placeholder="" value=" ' +
-          date[row] +
-          ' "><label>Date Time</label> </div>';
-
-        tb_student.rows[row].cells[4].innerHTML =
           '<div class="form-floating mb-3"><select id="dept" class="form-select" aria-label="Default select example" > <option selected> ' +
           dept[row] +
-          '</option><option value="สำนักปลัดเทศบาล">สำนักปลัดเทศบาล</option><option value="หน่วยงานตรวจสอบภายใน">หน่วยงานตรวจสอบภายใน</option> <option value="กองคลัง">กองคลัง</option><option value="กองช่าง">กองช่าง</option><option value="กองการศึกษา">กองการศึกษา</option><option value="กองสาธารณสุขฯ">กองสาธารณสุขฯ</option><option value="กองสวัสดิการสังคม">กองสวัสดิการสังคม</option>  </select>  </div>';
-
-        tb_student.rows[row].cells[5].innerHTML =
+          '</option><option value="ช่างกลโรงงาน">ช่างกลโรงงาน</option><option value="ช่างยนต์">ช่างยนต์</option> <option value="เทคโนโลยีสารสนเทศ">เทคโนโลยีสารสนเทศ</option>  </select>  </div>';
+        tb_student.rows[row].cells[4].innerHTML =
           '<button type="button" class="btn btn-success mx-2" onclick="click_save_edit(' +
           row +
           ')">Save</button><button type="button" class="btn btn-danger"onclick="click_cancel_edit()" >Cancel</button>';
 
         document.getElementById("add_data").disabled = true;
         let btn_edit = document.querySelectorAll("#btn_edit , #btn_delete");
-        for (let i = 0; i < btn_edit.length; i++) {
+        for (let i = 0; 1 < btn_edit.length; i++) {
           btn_edit[i].disabled = true;
         }
       }
@@ -247,52 +212,6 @@
         load_data();
 
         document.getElementById("add_data").disabled = false;
-      }
-
-      function generateQRCode(rowIndex) {
-        // ดึงข้อมูลจากแถวที่เลือก
-        const sidData = sid[rowIndex];
-        const kruData = kru[rowIndex];
-        const snameData = sname[rowIndex];
-        const dateData = date[rowIndex];
-        const deptData = dept[rowIndex];
-
-        // สร้าง URL ที่จะนำไปสู่หน้าที่มีข้อมูลของแถวนี้
-        const baseUrl = "https://example.com/item"; // เปลี่ยน URL นี้เป็น URL ของคุณ
-        const url = `${baseUrl}?sid=${sidData}&kru=${encodeURIComponent(
-          kruData
-        )}&sname=${encodeURIComponent(snameData)}&date=${encodeURIComponent(
-          dateData
-        )}&dept=${encodeURIComponent(deptData)}`;
-
-        // สร้าง QR Code
-        const qrContainer = document.createElement("div");
-        QRCode.toDataURL(
-          url,
-          { errorCorrectionLevel: "H" },
-          function (err, qrCodeUrl) {
-            if (err) {
-              console.error(err);
-              return;
-            }
-
-            // แสดง QR Code ในหน้าต่างใหม่หรือบนหน้าเดิม
-            const qrImage = document.createElement("img");
-            qrImage.src = qrCodeUrl;
-            qrImage.alt = "QR Code";
-            qrImage.style.width = "200px";
-            qrImage.style.height = "200px";
-
-            // สร้างป็อปอัพเพื่อแสดง QR Code
-            const popupWindow = window.open(
-              "",
-              "_blank",
-              "width=300,height=300"
-            );
-            popupWindow.document.write("<h3>QR Code for Data:</h3>");
-            popupWindow.document.body.appendChild(qrImage);
-          }
-        );
       }
     </script>
 
